@@ -1,0 +1,37 @@
+
+.headerComponent{
+  display: flex;
+  justify-content: space-between;
+  background-color: #4a6da7;
+  color: #fff;
+  padding: 20px 15px;
+  align-items: center;
+}
+
+.headerComponent .image-section img{
+  max-width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.headerComponent > div{
+  font-size: 20px;
+}
+
+.headerComponent ul{
+  display: flex;
+  gap: 15px;
+}
+
+.headerComponent ul li{
+  font-size: 18px;
+  list-style-type: none;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+
+.headerComponent ul li a{
+  color: #edeaea;
+  text-decoration: none;
+}

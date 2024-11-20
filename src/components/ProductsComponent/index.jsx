@@ -1,45 +1,103 @@
 import './ProductsComponent.css'
 import { MoonLoader } from 'react-spinners';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removePosts } from '../../Redux/postsSlice';
+import { useState, useEffect } from 'react';
+import EmptyHeart from '../../assets/images/EmptyHeart.png'
+import FilledHeart from '../../assets/images/FilledHeart.png'
 
-const ProductsComponent = ({ posts, loading}) => {
-  
+const ProductsComponent = ({ posts, loading }) => {
+  const [addedToCartList, setAddedToCartList] = useState([]);
+
+  const toggleHeart = (index) => {
+    // if (addedToCart) {
+    //   setAddedToCart(false)
+    // } else {
+    //   setAddedToCart(true)
+    // }
+    console.log(index, "test-index")
+    setAddedToCartList([...addedToCartList, index]);
+  }
+
+  console.log(addedToCartList, 'test')
+
   const dispatch = useDispatch();
 
   const removePost = (id) => {
-  dispatch(removePosts(id))
-  }
-   
+    dispatch(removePosts(id));
+
+    setFilteredPosts((prevFilteredPosts) => prevFilteredPosts.filter(post => post.id !== id));
+  };
+
+  //ცოტა მე, ცოტა ინტერნეტი და გამოვიდა ბოლოს.
+
+
+  const [inputValue, setInputValue] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState(posts);
+
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value); 
+  };
+
+
+  const filterPosts = () => {
+    if (inputValue === '') {
+      setFilteredPosts(posts);
+    } else {
+      const filtered = posts.filter(post =>
+        post.title.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setFilteredPosts(filtered); 
+    }
+  };
+
+  useEffect(() => {
+    if (inputValue === '') {
+      setFilteredPosts(posts);
+    }
+  }, [inputValue, posts]);
 
   return (
     <div className='productsContainer'>
       <div className="input-container">
-        <input type="text" />
-         <div className="btn">
-        <button>Search</button>
+        <input 
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder='Type title name' 
+        />
+        <div className="btn">
+          <button onClick={filterPosts}>Search</button>
         </div>
-        <select id="drop-down">
-          <option value="">Cards</option>
-          <option value="">APIS</option>
-          <option value="">buttons</option>
-        </select>
       </div>
-      {
-        loading ? <div className='loading'><MoonLoader/></div>: <div className="products">
-        {
-          posts.map((post) => (
+
+      {loading ? (
+        <div className='loading'>
+          <MoonLoader />
+        </div>
+      ) : (
+        <div className="products">
+          {filteredPosts.map((post, index) => (
             <div className='product' key={post.id}>
               <p>{post.body}</p>
               <h1>{post.title}</h1>
-              <button onClick={()=> removePost(post.id)} className='btn'>Remove item</button>
+              <div className="remove-add-btns">
+                 <button onClick={() => removePost(post.id)} className='btn'>Remove item</button>
+                <div className='heartbtn' onClick={()=> toggleHeart(index)}>
+                  {
+                    addedToCartList.includes(index) ?
+                      <img src={FilledHeart} alt="" /> :
+                      <img src={EmptyHeart} alt=""/>
+                  }
+              </div>
+             </div>
             </div>
-          ))
-        }
-      </div>
-      }
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default ProductsComponent;

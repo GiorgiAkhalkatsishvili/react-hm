@@ -1,6 +1,6 @@
 import React from 'react'
-import ProductsComponent from '../../components/ProductsComponent'
 import { useSelector } from 'react-redux';
+import ProductsComponent from '../../components/ProductsComponent';
 
 
 const HomePage = () => {
@@ -11,7 +11,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <ProductsComponent posts={posts} loading={loading}/>
+      <ProductsComponent posts={posts} loading={loading} />
     </div>
   )
 }

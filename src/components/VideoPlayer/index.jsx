@@ -11,11 +11,11 @@ const VideoPlayer = () => {
 
   const handlePlay = () => {
     videoRef.current.play();
-  };
-
+  }
+  
   const handlePause = () => {
     videoRef.current.pause();
-  };
+  }
 
   return (
     <div className='VideoPlayer'>

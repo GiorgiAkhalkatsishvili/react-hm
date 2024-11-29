@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const postsSlice = createSlice({
   name: 'posts',
   initialState: {
     posts: [],
     loading: true,
+    cartItems: []
   },
   reducers: {
     setPosts: (state, action) => {
@@ -20,8 +20,14 @@ const postsSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    addCartItems: (state, action) => {
+      state.cartItems.push(action.payload);
+    },
+    removeCartItem: (state, action) => {
+      state.cartItems = state.cartItems.filter(post => post.id !== action.payload);
+    },
   },
 });
 
-export const { setPosts, addPost, removePosts, setLoading } = postsSlice.actions;
+export const { setPosts, addPost, removePosts, setLoading, addCartItems, removeCartItem} = postsSlice.actions;
 export default postsSlice.reducer;

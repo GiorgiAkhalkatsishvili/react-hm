@@ -1,39 +1,37 @@
 import './ProductsComponent.css'
 import { MoonLoader } from 'react-spinners';
-import { useDispatch } from 'react-redux';
-import { removePosts } from '../../Redux/postsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCartItems, removePosts } from '../../Redux/postsSlice';
 import { useState, useEffect } from 'react';
 import EmptyHeart from '../../assets/images/EmptyHeart.png'
 import FilledHeart from '../../assets/images/FilledHeart.png'
 
 const ProductsComponent = ({ posts, loading }) => {
   const [addedToCartList, setAddedToCartList] = useState([]);
+  const cartItems = useSelector((state) => state.posts.cartItems);
 
-  const toggleHeart = (index) => {
-    // if (addedToCart) {
-    //   setAddedToCart(false)
+  console.log(cartItems, 'cartItems-test')
+
+  const toggleHeart = (index, post) => {
+    // if (addedToCartList) {
+    //   setAddedToCartList(false)
     // } else {
-    //   setAddedToCart(true)
+    //   setAddedToCartList(true)
     // }
-    console.log(index, "test-index")
+    dispatch(addCartItems(post))
     setAddedToCartList([...addedToCartList, index]);
   }
 
-  console.log(addedToCartList, 'test')
+  const [inputValue, setInputValue] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState(posts);
 
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
 
   const removePost = (id) => {
     dispatch(removePosts(id));
 
     setFilteredPosts((prevFilteredPosts) => prevFilteredPosts.filter(post => post.id !== id));
   };
-
-  //ცოტა მე, ცოტა ინტერნეტი და გამოვიდა ბოლოს.
-
-
-  const [inputValue, setInputValue] = useState('');
-  const [filteredPosts, setFilteredPosts] = useState(posts);
 
 
   const handleInputChange = (e) => {
@@ -73,9 +71,7 @@ const ProductsComponent = ({ posts, loading }) => {
       </div>
 
       {loading ? (
-        <div className='loading'>
-          <MoonLoader />
-        </div>
+        <div className='loading'><MoonLoader/></div>
       ) : (
         <div className="products">
           {filteredPosts.map((post, index) => (
@@ -83,8 +79,7 @@ const ProductsComponent = ({ posts, loading }) => {
               <p>{post.body}</p>
               <h1>{post.title}</h1>
               <div className="remove-add-btns">
-                 <button onClick={() => removePost(post.id)} className='btn'>Remove item</button>
-                <div className='heartbtn' onClick={()=> toggleHeart(index)}>
+                <div className='heartbtn' onClick={()=> toggleHeart(index, post)}>
                   {
                     addedToCartList.includes(index) ?
                       <img src={FilledHeart} alt="" /> :
